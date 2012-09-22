@@ -1,0 +1,27 @@
+<?php
+class Assignment extends AppModel {
+
+    public $name = 'Assignment';
+    public $validate = array(
+        'title' => array(
+		'length' => array(
+		    'rule' => array('maxLength', 50),
+		    'message' => "Assignment's title must be no larger than 50 characters long."
+		),
+		'required' => array(
+			'rule' => array('notEmpty'),
+                	'message' => "The assignment's title is required"
+		)
+        ),
+	'description' => array(
+		'length' => array(
+		    'rule' => array('maxLength', 255),
+		    'message' => "Assignment's description must be no larger than 255 characters long."
+		),
+		'required' => array(
+			'rule' => array('notEmpty'),
+                	'message' => "The assignment's description is required"
+		)
+	),
+    );
+}

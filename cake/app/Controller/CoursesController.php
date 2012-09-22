@@ -1,0 +1,122 @@
+<?php
+App::uses('AppController', 'Controller');
+/**
+ * Courses Controller
+ *
+ * @property Course $Course
+ */
+class CoursesController extends AppController {
+
+/**
+ * index method
+ *
+ * @return void
+ */
+	public function index() {
+	    //se asigna a authUser el usuario actual. Esto funciona para validar en la vista el acceso
+ 	    $this->set('authUser', $this->Auth->user());
+		$this->Course->recursive = 0;
+		$this->set('courses', $this->paginate());
+	}
+
+/**
+ * view method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function view($id = null) {
+		$this->Course->id = $id;
+		if (!$this->Course->exists()) {
+			throw new NotFoundException(__('Invalid course'));
+			//$this->redirect(array('action' => 'index'));
+		}
+		$this->set('course', $this->Course->read(null, $id));
+	}
+
+/**
+ * add method
+ *
+ * @return void
+ */
+	public function add() {
+	    if ($this->Auth->user('role') == 'administrador' or $this->Auth->user('role') == 'profesor'){		    
+		if ($this->request->is('post')) {
+			$this->Course->create();
+			if ($this->Course->save($this->request->data)) {
+				$this->Session->setFlash(__('The course has been saved'));
+				$this->redirect(array('action' => 'index'));
+			} else {
+				$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+			}
+		}
+ 	    } else {
+		//$this->Session->setFlash(__("You don't have access to this action."));
+		$this->redirect(array('controller' => 'home', 'action' => 'index'));
+	    }
+		$areas = $this->Course->Area->find('list');
+		$this->set(compact('areas'));
+	}
+
+/**
+ * edit method
+ *
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function edit($id = null) {
+		if ($this->Auth->user('role') == 'administrador'){		
+			$this->Course->id = $id;
+			if (!$this->Course->exists()) {
+				throw new NotFoundException(__('Invalid course'));
+				$this->redirect(array('action' => 'index'));
+			}
+			if ($this->request->is('post') || $this->request->is('put')) {
+				if ($this->Course->save($this->request->data)) {
+					$this->Session->setFlash(__('The course has been saved'));
+					$this->redirect(array('action' => 'index'));
+				} else {
+					$this->Session->setFlash(__('The course could not be saved. Please, try again.'));
+				}
+			} else {
+				$this->request->data = $this->Course->read(null, $id);
+			}
+		} else {
+		$this->Session->setFlash(__("You don't have access to this action."));
+		}
+		$areas = $this->Course->Area->find('list');
+		$this->set(compact('areas'));
+	}
+
+/**
+ * delete method
+ *
+ * @throws MethodNotAllowedException
+ * @throws NotFoundException
+ * @param string $id
+ * @return void
+ */
+	public function delete($id = null) {
+		if ($this->Auth->user('role') == 'administrador'){		
+			if (!$this->request->is('post')) {
+				throw new MethodNotAllowedException();
+			}
+			$this->Course->id = $id;
+			if (!$this->Course->exists()) {
+				throw new NotFoundException(__('Invalid course'));
+				$this->redirect(array('action' => 'index'));
+			}
+			if ($this->Course->delete()) {
+				$this->Session->setFlash(__('Course deleted'));
+				$this->redirect(array('action' => 'index'));
+			}
+			$this->Session->setFlash(__('Course was not deleted'));
+			$this->redirect(array('action' => 'index'));
+		} else {
+		$this->Session->setFlash(__("You don't have access to this action."));
+		}
+	}
+
+}

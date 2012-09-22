@@ -1,0 +1,28 @@
+<?php
+class File extends AppModel {
+
+    public $name = 'File';
+    public $validate = array(
+        'title' => array(
+		'length' => array(
+		    'rule' => array('maxLength', 50),
+		    'message' => "The file's title must be no larger than 50 characters long."
+		),
+		'required' => array(
+			'rule' => array('notEmpty'),
+                	'message' => "The file's title is required"
+		)
+	),
+	'description' => array(
+		'length' => array(
+		    'rule' => array('maxLength', 50),
+		    'message' => "The file's description must be no larger than 255 characters long."
+		),
+		'required' => array(
+			'rule' => array('notEmpty'),
+                	'message' => "The file's descrption is required"
+		)
+	)
+	//Falta lo de la data
+    );
+}

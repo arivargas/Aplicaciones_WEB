@@ -1,0 +1,25 @@
+<div class="courseUsers form">
+<?php echo $this->Form->create('CourseUser');?>
+	<fieldset>
+ 		<legend><?php __('Add User to Course'); ?></legend>
+	<h3>Select a course</h3>
+	<?php
+		echo $this->Form->input('course_id');
+	?>
+	<?php
+		echo $this->Form->hidden('user_id');
+	?>
+	</fieldset>
+<?php echo $this->Form->end(__('Submit', true));?>
+</div>
+<div class="actions">
+	<h3><?php __('Actions'); ?></h3>
+	<ul>
+
+		<li><?php echo $this->Html->link(__('List Course Users', true), array('action' => 'index'));?></li>
+		<li><?php echo $this->Html->link(__('List Courses', true), array('controller' => 'courses', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New Course', true), array('controller' => 'courses', 'action' => 'add')); ?> </li>
+		<li><?php echo $this->Html->link(__('List Users', true), array('controller' => 'users', 'action' => 'index')); ?> </li>
+		<li><?php echo $this->Html->link(__('New User', true), array('controller' => 'users', 'action' => 'add')); ?> </li>
+	</ul>
+</div>
